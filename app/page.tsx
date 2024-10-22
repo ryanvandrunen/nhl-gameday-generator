@@ -1,4 +1,4 @@
-import { GameList } from "../components/GameList";
+import GameList from "../components/GameList";
 import {
   Card,
   CardContent,
@@ -9,21 +9,21 @@ import {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-zinc-900 to-zinc-950 p-4 md:p-8">
+    <main className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-white md:text-6xl">
+        <header className="mb-8 text-center">
+          <h1 className="text-4xl font-bold tracking-tight md:text-6xl bg-gradient-to-r from-black to-[#909090] bg-clip-text text-transparent pb-2">
             NHL Gameday Graphics
           </h1>
-          <p className="mt-4 text-lg text-zinc-400">
+          <p className="mt-4 text-lg">
             Generate graphics for today's NHL games
           </p>
-        </div>
+        </header>
 
-        <Card className="border-zinc-800 bg-zinc-900/50 backdrop-blur">
+        <Card className="bg-white/10 backdrop-blur-lg shadow-2xl bg-dots">
           <CardHeader>
-            <CardTitle className="text-white">Today's Games</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-2xl font-bold">Today's Games</CardTitle>
+            <CardDescription className="">
               Select a game to generate a gameday graphic.
             </CardDescription>
           </CardHeader>
