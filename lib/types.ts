@@ -10,6 +10,7 @@ export interface NHLGame {
         default: string;
       };
       abbrev: string;
+      record: string;
     };
     homeTeam: {
       id: number;
@@ -17,6 +18,7 @@ export interface NHLGame {
         default: string;
       };
       abbrev: string;
+      record: string;
     };
     venue: {
       default: string;
@@ -31,4 +33,19 @@ export interface NHLGame {
       games: NHLGame[];
     }[];
     todayGames: NHLGame[];
+  }
+
+  export interface TeamRecordProps {
+    logoSrc: string;
+    record: string;
+    bottomColour: string;
+    topColour: string;
+  }
+
+  export interface GameDetailsProps {
+    venue: string;
+    timeSrc: string;
+    timeAlt: string;
+    time: string;
+    season: string;
   }

@@ -8,8 +8,16 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-  	extend: {
-  		colors: {
+    utilities: {
+      ".clip-path-left": {
+        clipPath: "polygon(0 0, 52% 0, 48% 100%, 0 100%)",
+      },
+      ".clip-path-right": {
+        clipPath: "polygon(69% 0, 100% 0, 100% 100%, 36% 100%)",
+      },
+    },
+    extend: {
+      colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

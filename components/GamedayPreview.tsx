@@ -1,75 +1,85 @@
-"use client";
-
-import { format } from "date-fns";
-import Image from "next/image";
+import * as React from "react";
+import { TeamRecord } from "./TeamRecord";
+import { GameDetails } from "./GameDetails";
+import { TEAM_COLOURS } from "@/lib/constants";
+import { NHLGame } from "@/lib/types";
+import { format, parseISO } from "date-fns";
+import SplitImage from "./SplitImage";
 
 interface GamedayPreviewProps {
-  data: {
-    homeTeam: string;
-    awayTeam: string;
-    gameDate: Date;
-    gameTime: string;
-  };
+  game: NHLGame;
+  awayPlayerImage: string;
+  homePlayerImage: string;
+  leftLogoUrl: string;
+  rightLogoUrl: string;
 }
 
-export default function GamedayPreview({ data }: GamedayPreviewProps) {
-  const { homeTeam, awayTeam, gameDate, gameTime } = data;
-
+export const GamedayPreview: React.FC<GamedayPreviewProps> = ({
+  game,
+  awayPlayerImage,
+  homePlayerImage,
+  leftLogoUrl,
+  rightLogoUrl,
+}) => {
   return (
-    <div className="relative h-full w-full bg-gradient-to-br from-blue-950 to-zinc-950 p-8">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1515703407324-5f753afd8be8?q=80&w=2000')] bg-cover bg-center opacity-10"></div>
-
-      <div className="relative flex h-full flex-col items-center justify-between">
-        <div className="text-center">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">
-            NHL Hockey
-          </h3>
-          <p className="mt-1 text-lg font-medium text-white">
-            {format(gameDate, "EEEE, MMMM d, yyyy")}
-          </p>
-        </div>
-
-        <div className="flex w-full items-center justify-between">
-          <div className="text-center">
-            <div className="relative mb-4 h-32 w-32">
-              <Image
-                src={`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${homeTeam}.svg`}
-                alt={homeTeam}
-                fill
-                className="object-contain"
-                unoptimized
+    <main className="overflow-hidden flex justify-center max-w-[751px] clip-content">
+      <section className="flex flex-col w-full max-md:max-w-full clip-content">
+        <SplitImage
+          leftImage={awayPlayerImage}
+          rightImage={homePlayerImage}
+          altLeft={`${game.awayTeam.name.default} player`}
+          altRight={`${game.homeTeam.name.default} player`}
+        />
+        <section className="py-2 w-full bg-zinc-900 max-md:max-w-full">
+          <div className="flex gap-5 max-md:flex-col">
+            <div className="flex flex-col w-[33%] max-md:ml-0 max-md:w-full">
+              <TeamRecord
+                logoSrc={leftLogoUrl}
+                record={`${game.awayTeam.record}`}
+                bottomColour={
+                  TEAM_COLOURS[
+                    game.awayTeam.abbrev as keyof typeof TEAM_COLOURS
+                  ][0]
+                }
+                topColour={
+                  TEAM_COLOURS[
+                    game.awayTeam.abbrev as keyof typeof TEAM_COLOURS
+                  ][1]
+                }
               />
             </div>
-            <h2 className="text-xl font-bold text-white">{homeTeam}</h2>
-          </div>
-
-          <div className="text-center">
-            <div className="rounded-full bg-white/10 px-6 py-2 backdrop-blur">
-              <p className="text-2xl font-bold text-white">VS</p>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <div className="relative mb-4 h-32 w-32">
-              <Image
-                src={`https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/${awayTeam}.svg`}
-                alt={awayTeam}
-                fill
-                className="object-contain"
-                unoptimized
+            <div className="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
+              <GameDetails
+                venue={game.venue.default}
+                timeSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/316535ecfa44b32f402632d5bd7dd3b1a2ab9960a79cf11618236d49a04dfe49?placeholderIfAbsent=true&apiKey=7a7173da98bb425ca4236bb2160d9309"
+                timeAlt="Game time illustration"
+                time={`${format(parseISO(game.startTimeUTC), "h:mm a")} ET`}
+                season={`${game.season
+                  .toString()
+                  .substring(0, 4)} - ${game.season
+                  .toString()
+                  .substring(4)} SEASON`}
               />
             </div>
-            <h2 className="text-xl font-bold text-white">{awayTeam}</h2>
+            <div className="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
+              <TeamRecord
+                logoSrc={rightLogoUrl}
+                record={`${game.homeTeam.record}`}
+                bottomColour={
+                  TEAM_COLOURS[
+                    game.homeTeam.abbrev as keyof typeof TEAM_COLOURS
+                  ][0]
+                }
+                topColour={
+                  TEAM_COLOURS[
+                    game.homeTeam.abbrev as keyof typeof TEAM_COLOURS
+                  ][1]
+                }
+              />
+            </div>
           </div>
-        </div>
-
-        <div className="text-center">
-          <p className="text-xl font-semibold text-white">{gameTime} ET</p>
-          <div className="mt-2 inline-flex items-center rounded-full bg-blue-500/10 px-4 py-1 text-sm font-medium text-blue-300 backdrop-blur">
-            Game Time
-          </div>
-        </div>
-      </div>
-    </div>
+        </section>
+      </section>
+    </main>
   );
-}
+};

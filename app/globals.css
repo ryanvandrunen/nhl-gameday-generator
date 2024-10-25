@@ -75,3 +75,11 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.clip-path-left {
+  clip-path: polygon(0 0, 60% 0, 40% 100%, 0 100%);
+}
+
+.clip-path-right {
+  clip-path: polygon(60% 0, 100% 0, 100% 100%, 40% 100%);
+}

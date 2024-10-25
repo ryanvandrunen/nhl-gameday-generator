@@ -6,8 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { format } from "date-fns";
 
 export default function Home() {
+  const today = new Date();
+  const formattedDate = format(today, "yyyy-MM-dd");
+
   return (
     <main className="min-h-screen p-4 md:p-8">
       <div className="mx-auto max-w-6xl">
@@ -22,7 +26,9 @@ export default function Home() {
 
         <Card className="bg-white/10 backdrop-blur-lg shadow-2xl bg-dots">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">Today's Games</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              Today's Games ({formattedDate})
+            </CardTitle>
             <CardDescription className="">
               Select a game to generate a gameday graphic.
             </CardDescription>

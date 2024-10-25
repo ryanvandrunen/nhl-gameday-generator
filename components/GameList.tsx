@@ -1,11 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { format, parseISO } from "date-fns";
+
 import { Loader2 } from "lucide-react";
+
 import { NHLGame } from "@/lib/types";
-import GamedayPreview from "@/components/GamedayPreview";
+
+import { GamedayPreview } from "@/components/GamedayPreview";
+
 import { Button } from "@/components/ui/button";
+
 import {
   Table,
   TableBody,
@@ -15,28 +21,82 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { toPng } from "html-to-image";
+
+import { storage } from "@/firebase";
+
+import { ref, getDownloadURL, listAll } from "firebase/storage";
+
+import { TEAM_COLOURS } from "@/lib/constants";
+
 const GameList = () => {
   const [games, setGames] = useState<NHLGame[]>([]);
+  const [logoUrls, setLogoUrls] = useState<Record<string, string>>({});
+  const [playerImages, setPlayerImages] = useState<Record<string, string[]>>(
+    {}
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedGame, setSelectedGame] = useState<NHLGame | null>(null);
 
   useEffect(() => {
-    fetchGames();
+    const fetchAllData = async () => {
+      try {
+        await Promise.all([
+          fetchGames(),
+          preloadLogos(),
+          preloadPlayerImages(),
+        ]);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+        setError("Failed to fetch data");
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
   }, []);
 
   const fetchGames = async () => {
-    try {
-      const response = await fetch(
-        "https://cors-anywhere.herokuapp.com/https://api-web.nhle.com/v1/score/now"
-      );
-      const data = await response.json();
-      setGames(data.games || []);
-      setLoading(false);
-    } catch (error) {
-      setError("Failed to fetch games");
-      setLoading(false);
-    }
+    const response = await fetch("/api/nhl-scores");
+    const data = await response.json();
+    setGames(data.games || []);
+  };
+
+  const preloadLogos = async () => {
+    const logosRef = ref(storage, "logos");
+    const result: Record<string, string> = {};
+    const teamAbbreviations = Object.keys(TEAM_COLOURS);
+
+    await Promise.all(
+      teamAbbreviations.map(async (abbrev) => {
+        const logoRef = ref(logosRef, `${abbrev}.svg`);
+        const url = await getDownloadURL(logoRef);
+        result[abbrev] = url;
+      })
+    );
+
+    setLogoUrls(result);
+  };
+
+  const preloadPlayerImages = async () => {
+    const playersRef = ref(storage, "players");
+    const result: Record<string, string[]> = {};
+    const teamAbbreviations = Object.keys(TEAM_COLOURS);
+
+    await Promise.all(
+      teamAbbreviations.map(async (abbrev) => {
+        const teamPlayersRef = ref(playersRef, abbrev);
+        const playersList = await listAll(teamPlayersRef);
+        const playerUrls = await Promise.all(
+          playersList.items.map((item) => getDownloadURL(item))
+        );
+        result[abbrev] = playerUrls;
+      })
+    );
+
+    setPlayerImages(result);
   };
 
   if (loading) {
@@ -56,7 +116,14 @@ const GameList = () => {
   return (
     <div className="space-y-8">
       <GamesTable games={games} onSelectGame={setSelectedGame} />
-      {selectedGame && <GamePreview game={selectedGame} />}
+
+      {selectedGame && (
+        <GamePreview
+          game={selectedGame}
+          playerImages={playerImages}
+          logoUrls={logoUrls}
+        />
+      )}
     </div>
   );
 };
@@ -69,13 +136,16 @@ const LoadingState = () => (
 
 const ErrorState = ({
   error,
+
   onRetry,
 }: {
   error: string;
+
   onRetry: () => void;
 }) => (
   <div className="flex h-64 flex-col items-center justify-center gap-4">
     <p className="text-red-300">{error}</p>
+
     <Button onClick={onRetry} variant="outline" className="">
       Try Again
     </Button>
@@ -90,30 +160,39 @@ const NoGamesState = () => (
 
 const GamesTable = ({
   games,
+
   onSelectGame,
 }: {
   games: NHLGame[];
+
   onSelectGame: (game: NHLGame) => void;
 }) => (
   <Table>
     <TableHeader>
       <TableRow className="border-b border-slate-600">
         <TableHead className="font-bold">Time (ET)</TableHead>
+
         <TableHead className="font-bold">Matchup</TableHead>
+
         <TableHead className="font-bold">Venue</TableHead>
+
         <TableHead className="text-right font-bold"></TableHead>
       </TableRow>
     </TableHeader>
+
     <TableBody>
       {games.map((game) => (
         <TableRow key={game.id} className="border-b">
           <TableCell className="font-medium">
             {format(parseISO(game.startTimeUTC), "h:mm a")}
           </TableCell>
+
           <TableCell className="">
             {game.awayTeam.name.default} @ {game.homeTeam.name.default}
           </TableCell>
+
           <TableCell className="">{game.venue.default}</TableCell>
+
           <TableCell className="text-right">
             <Button
               variant="outline"
@@ -129,17 +208,72 @@ const GamesTable = ({
   </Table>
 );
 
-const GamePreview = ({ game }: { game: NHLGame }) => (
-  <div className="relative aspect-video w-full overflow-hidden rounded-lg border backdrop-blur-sm">
-    <GamedayPreview
-      data={{
-        homeTeam: game.homeTeam.abbrev,
-        awayTeam: game.awayTeam.abbrev,
-        gameDate: parseISO(game.startTimeUTC),
-        gameTime: format(parseISO(game.startTimeUTC), "h:mm a"),
-      }}
-    />
-  </div>
-);
+const GamePreview = ({
+  game,
+  playerImages,
+  logoUrls,
+}: {
+  game: NHLGame;
+  playerImages: Record<string, string[]>;
+  logoUrls: Record<string, string>;
+}) => {
+  const downloadImage = () => {
+    const node = document.getElementById("gameday-preview");
+
+    if (node) {
+      toPng(node)
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+
+          link.download = "gameday-preview.png";
+
+          link.href = dataUrl;
+
+          link.click();
+        })
+
+        .catch((error) => {
+          console.error("Failed to download image", error);
+        });
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      <div
+        id="gameday-preview"
+        className="w-full max-w-[751px] overflow-hidden"
+      >
+        <GamedayPreview
+          game={game}
+          awayPlayerImage={
+            playerImages[game.awayTeam.abbrev][
+              Math.floor(
+                Math.random() * playerImages[game.awayTeam.abbrev].length
+              )
+            ] || ""
+          }
+          homePlayerImage={
+            playerImages[game.homeTeam.abbrev][
+              Math.floor(
+                Math.random() * playerImages[game.homeTeam.abbrev].length
+              )
+            ] || ""
+          }
+          leftLogoUrl={logoUrls[game.awayTeam.abbrev] || ""}
+          rightLogoUrl={logoUrls[game.homeTeam.abbrev] || ""}
+        />
+      </div>
+
+      <Button
+        onClick={downloadImage}
+        variant="outline"
+        className="mt-4 bg-black text-white hover:text-white hover:bg-stone-700"
+      >
+        Download as PNG
+      </Button>
+    </div>
+  );
+};
 
 export default GameList;
