@@ -18,6 +18,7 @@ export const Team: React.FC<TeamProps> = ({
         }}
       >
         <Image
+          crossOrigin="anonymous"
           loading="lazy"
           width={227}
           height={227}

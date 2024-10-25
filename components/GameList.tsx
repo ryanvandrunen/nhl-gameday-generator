@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { format, parseISO } from "date-fns";
-import { Loader2 } from "lucide-react";
+import { Anchor, Loader2 } from "lucide-react";
 import { NHLGame } from "@/lib/types";
 import { GamedayPreview } from "@/components/GamedayPreview";
 import { Button } from "@/components/ui/button";
@@ -209,7 +209,6 @@ const GamePreview = ({
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
-    // doesnt work
     return;
   };
 

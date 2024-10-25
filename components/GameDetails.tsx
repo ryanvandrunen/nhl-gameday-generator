@@ -14,6 +14,7 @@ export const GameDetails: React.FC<GameDetailsProps> = ({
       </h1>
       <h2 className="mt-7 text-center font-medium">{venue}</h2>
       <Image
+        crossOrigin="anonymous"
         width={190}
         height={190}
         loading="lazy"
