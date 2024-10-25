@@ -1,17 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, useRef } from "react";
 import { format, parseISO } from "date-fns";
-
 import { Loader2 } from "lucide-react";
-
 import { NHLGame } from "@/lib/types";
-
 import { GamedayPreview } from "@/components/GamedayPreview";
-
 import { Button } from "@/components/ui/button";
-
 import {
   Table,
   TableBody,
@@ -20,13 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { toPng } from "html-to-image";
-
 import { storage } from "@/firebase";
-
 import { ref, getDownloadURL, listAll } from "firebase/storage";
-
 import { TEAM_COLOURS } from "@/lib/constants";
 
 const GameList = () => {
@@ -217,33 +206,16 @@ const GamePreview = ({
   playerImages: Record<string, string[]>;
   logoUrls: Record<string, string>;
 }) => {
-  const downloadImage = () => {
-    const node = document.getElementById("gameday-preview");
+  const previewRef = useRef<HTMLDivElement>(null);
 
-    if (node) {
-      toPng(node)
-        .then((dataUrl) => {
-          const link = document.createElement("a");
-
-          link.download = "gameday-preview.png";
-
-          link.href = dataUrl;
-
-          link.click();
-        })
-
-        .catch((error) => {
-          console.error("Failed to download image", error);
-        });
-    }
+  const handleDownload = async () => {
+    // doesnt work
+    return;
   };
 
   return (
     <div className="flex flex-col items-center">
-      <div
-        id="gameday-preview"
-        className="w-full max-w-[751px] overflow-hidden"
-      >
+      <div ref={previewRef} className="w-full max-w-[751px] overflow-hidden">
         <GamedayPreview
           game={game}
           awayPlayerImage={
@@ -266,11 +238,11 @@ const GamePreview = ({
       </div>
 
       <Button
-        onClick={downloadImage}
+        onClick={handleDownload}
         variant="outline"
         className="mt-4 bg-black text-white hover:text-white hover:bg-stone-700"
       >
-        Download as PNG
+        Download as JPG
       </Button>
     </div>
   );

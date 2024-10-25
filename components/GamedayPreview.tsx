@@ -22,7 +22,10 @@ export const GamedayPreview: React.FC<GamedayPreviewProps> = ({
   rightLogoUrl,
 }) => {
   return (
-    <main className="overflow-hidden flex justify-center max-w-[751px] clip-content">
+    <main
+      className="overflow-hidden flex justify-center max-w-[751px] clip-content"
+      id="gameday-preview"
+    >
       <section className="flex flex-col w-full max-md:max-w-full clip-content">
         <SplitImage
           leftImage={awayPlayerImage}
