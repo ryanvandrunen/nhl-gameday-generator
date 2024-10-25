@@ -17,6 +17,7 @@ import {
 import { storage } from "@/firebase";
 import { ref, getDownloadURL, listAll } from "firebase/storage";
 import { TEAM_COLOURS } from "@/lib/constants";
+import { toJpeg } from "html-to-image";
 
 const GameList = () => {
   const [games, setGames] = useState<NHLGame[]>([]);
@@ -209,30 +210,43 @@ const GamePreview = ({
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
-    return;
+    const element = document.getElementById("gameday-preview");
+    if (!element) return;
+    try {
+      const canvas = await toJpeg(element, {});
+      const a = document.createElement("a");
+      a.href = canvas;
+      a.download = "gameday-preview.jpg";
+      a.click();
+    } catch (error) {
+      console.error("Error generating image:", error);
+    }
   };
+
+  const proxyUrl = (url: string) =>
+    `/api/proxy-image?url=${encodeURIComponent(url)}`;
 
   return (
     <div className="flex flex-col items-center">
       <div ref={previewRef} className="w-full max-w-[751px] overflow-hidden">
         <GamedayPreview
           game={game}
-          awayPlayerImage={
+          awayPlayerImage={proxyUrl(
             playerImages[game.awayTeam.abbrev][
               Math.floor(
                 Math.random() * playerImages[game.awayTeam.abbrev].length
               )
             ] || ""
-          }
-          homePlayerImage={
+          )}
+          homePlayerImage={proxyUrl(
             playerImages[game.homeTeam.abbrev][
               Math.floor(
                 Math.random() * playerImages[game.homeTeam.abbrev].length
               )
             ] || ""
-          }
-          leftLogoUrl={logoUrls[game.awayTeam.abbrev] || ""}
-          rightLogoUrl={logoUrls[game.homeTeam.abbrev] || ""}
+          )}
+          leftLogoUrl={proxyUrl(logoUrls[game.awayTeam.abbrev] || "")}
+          rightLogoUrl={proxyUrl(logoUrls[game.homeTeam.abbrev] || "")}
         />
       </div>
 

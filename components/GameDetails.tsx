@@ -17,10 +17,9 @@ export const GameDetails: React.FC<GameDetailsProps> = ({
         crossOrigin="anonymous"
         width={190}
         height={190}
-        loading="lazy"
         src="/images/nhl.png"
         alt="NHL logo"
-        className="object-contain self-center mt-2 max-w-full aspect-[1.91] w-[190px]"
+        className="self-center mt-2 max-w-full aspect-[1.91] w-[190px] h-auto"
       />
       <time className="text-center mt-5 font-medium">{time}</time>
       <p className="mx-6 mt-6 text-xs text-center tracking-[2.4px] max-md:mx-2.5">

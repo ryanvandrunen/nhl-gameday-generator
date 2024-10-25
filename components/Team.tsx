@@ -19,12 +19,11 @@ export const Team: React.FC<TeamProps> = ({
       >
         <Image
           crossOrigin="anonymous"
-          loading="lazy"
           width={227}
           height={227}
           src={logoSrc}
           alt="team logo"
-          className="object-contain max-w-full aspect-[1.08] w-[227px] drop-shadow-lg"
+          className="max-w-full aspect-[1.08] drop-shadow-lg"
         />
       </div>
       <div className="text-center mt-2">{record}</div>

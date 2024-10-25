@@ -5,7 +5,11 @@ const nextConfig: NextConfig = {
     appIsrStatus: false,
   },
   images: {
-    domains: ['firebasestorage.googleapis.com', 'localhost'],
+    remotePatterns: [
+      {
+        hostname: "firebasestorage.googleapis.com",
+      },
+    ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },

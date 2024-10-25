@@ -21,6 +21,7 @@ const SplitImage = ({
         {/* Left Panel */}
         <div className="absolute inset-0 clip-path-right overflow-hidden z-[-2]">
           <img
+            crossOrigin="anonymous"
             src={rightImage}
             alt={altLeft}
             className="relative w-full h-full object-cover left-[200px]"
@@ -30,6 +31,7 @@ const SplitImage = ({
         {/* Right Panel */}
         <div className="absolute inset-0 clip-path-left z-[-2]">
           <img
+            crossOrigin="anonymous"
             src={leftImage}
             alt={altRight}
             className="relative w-full h-full object-cover right-[200px]"
