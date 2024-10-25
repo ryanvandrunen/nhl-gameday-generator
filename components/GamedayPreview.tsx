@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TeamRecord } from "./TeamRecord";
+import { Team } from "./Team";
 import { GameDetails } from "./GameDetails";
 import { TEAM_COLOURS } from "@/lib/constants";
 import { NHLGame } from "@/lib/types";
@@ -33,7 +33,7 @@ export const GamedayPreview: React.FC<GamedayPreviewProps> = ({
         <section className="py-2 w-full bg-zinc-900 max-md:max-w-full">
           <div className="flex gap-5 max-md:flex-col">
             <div className="flex flex-col w-[33%] max-md:ml-0 max-md:w-full">
-              <TeamRecord
+              <Team
                 logoSrc={leftLogoUrl}
                 record={`${game.awayTeam.record}`}
                 bottomColour={
@@ -62,7 +62,7 @@ export const GamedayPreview: React.FC<GamedayPreviewProps> = ({
               />
             </div>
             <div className="flex flex-col ml-5 w-[33%] max-md:ml-0 max-md:w-full">
-              <TeamRecord
+              <Team
                 logoSrc={rightLogoUrl}
                 record={`${game.homeTeam.record}`}
                 bottomColour={

@@ -35,7 +35,7 @@ export interface NHLGame {
     todayGames: NHLGame[];
   }
 
-  export interface TeamRecordProps {
+  export interface TeamProps {
     logoSrc: string;
     record: string;
     bottomColour: string;

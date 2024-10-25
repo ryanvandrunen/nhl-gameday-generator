@@ -1,8 +1,8 @@
 import * as React from "react";
-import { TeamRecordProps } from "@/lib/types";
+import { TeamProps } from "@/lib/types";
 import Image from "next/image";
 
-export const TeamRecord: React.FC<TeamRecordProps> = ({
+export const Team: React.FC<TeamProps> = ({
   record,
   bottomColour,
   topColour,
