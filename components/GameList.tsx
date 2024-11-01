@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { format, parseISO } from "date-fns";
 import { Anchor, Loader2 } from "lucide-react";
 import { NHLGame } from "@/lib/types";
@@ -17,7 +17,7 @@ import {
 import { storage } from "@/firebase";
 import { ref, getDownloadURL, listAll } from "firebase/storage";
 import { TEAM_COLOURS } from "@/lib/constants";
-import { toJpeg } from "html-to-image";
+import { toPng } from "html-to-image";
 
 const GameList = () => {
   const [games, setGames] = useState<NHLGame[]>([]);
@@ -104,7 +104,7 @@ const GameList = () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 sm:space-y-8">
       <GamesTable games={games} onSelectGame={setSelectedGame} />
 
       {selectedGame && (
@@ -150,52 +150,49 @@ const NoGamesState = () => (
 
 const GamesTable = ({
   games,
-
   onSelectGame,
 }: {
   games: NHLGame[];
-
   onSelectGame: (game: NHLGame) => void;
 }) => (
-  <Table>
-    <TableHeader>
-      <TableRow className="border-b border-slate-600">
-        <TableHead className="font-bold">Time (ET)</TableHead>
-
-        <TableHead className="font-bold">Matchup</TableHead>
-
-        <TableHead className="font-bold">Venue</TableHead>
-
-        <TableHead className="text-right font-bold"></TableHead>
-      </TableRow>
-    </TableHeader>
-
-    <TableBody>
-      {games.map((game) => (
-        <TableRow key={game.id} className="border-b">
-          <TableCell className="font-medium">
-            {format(parseISO(game.startTimeUTC), "h:mm a")}
-          </TableCell>
-
-          <TableCell className="">
-            {game.awayTeam.name.default} @ {game.homeTeam.name.default}
-          </TableCell>
-
-          <TableCell className="">{game.venue.default}</TableCell>
-
-          <TableCell className="text-right">
-            <Button
-              variant="outline"
-              onClick={() => onSelectGame(game)}
-              className="bg-black text-white hover:text-white hover:bg-stone-700"
-            >
-              Generate Graphic
-            </Button>
-          </TableCell>
+  <div className="overflow-x-auto">
+    <Table>
+      <TableHeader>
+        <TableRow className="border-b border-slate-600">
+          <TableHead className="font-bold">Time (ET)</TableHead>
+          <TableHead className="font-bold">Matchup</TableHead>
+          <TableHead className="font-bold hidden sm:table-cell">
+            Venue
+          </TableHead>
+          <TableHead className="text-right font-bold"></TableHead>
         </TableRow>
-      ))}
-    </TableBody>
-  </Table>
+      </TableHeader>
+      <TableBody>
+        {games.map((game) => (
+          <TableRow key={game.id} className="border-b">
+            <TableCell className="font-medium">
+              {format(parseISO(game.startTimeUTC), "h:mm a")}
+            </TableCell>
+            <TableCell className="">
+              {game.awayTeam.name.default} @ {game.homeTeam.name.default}
+            </TableCell>
+            <TableCell className="hidden sm:table-cell">
+              {game.venue.default}
+            </TableCell>
+            <TableCell className="text-right">
+              <Button
+                variant="outline"
+                onClick={() => onSelectGame(game)}
+                className="bg-black text-white hover:text-white hover:bg-stone-700 text-xs sm:text-sm"
+              >
+                Generate
+              </Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </div>
 );
 
 const GamePreview = ({
@@ -209,26 +206,32 @@ const GamePreview = ({
 }) => {
   const previewRef = useRef<HTMLDivElement>(null);
 
-  const handleDownload = async () => {
-    const element = document.getElementById("gameday-preview");
-    if (!element) return;
-    try {
-      const canvas = await toJpeg(element, {});
-      const a = document.createElement("a");
-      a.href = canvas;
-      a.download = "gameday-preview.jpg";
-      a.click();
-    } catch (error) {
-      console.error("Error generating image:", error);
+  const handleDownload = useCallback(() => {
+    if (previewRef.current === null) {
+      return;
     }
-  };
+
+    toPng(previewRef.current, { includeQueryParams: true })
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = `gameday-preview-${game.id}.png`;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.error("Error generating image:", err);
+      });
+  }, [game.id]);
 
   const proxyUrl = (url: string) =>
     `/api/proxy-image?url=${encodeURIComponent(url)}`;
 
   return (
     <div className="flex flex-col items-center">
-      <div ref={previewRef} className="w-full max-w-[751px] overflow-hidden">
+      <div
+        className="w-full max-w-[751px] overflow-hidden drop-shadow-md"
+        ref={previewRef}
+      >
         <GamedayPreview
           game={game}
           awayPlayerImage={proxyUrl(
@@ -255,7 +258,7 @@ const GamePreview = ({
         variant="outline"
         className="mt-4 bg-black text-white hover:text-white hover:bg-stone-700"
       >
-        Download as JPG
+        Download as PNG
       </Button>
     </div>
   );

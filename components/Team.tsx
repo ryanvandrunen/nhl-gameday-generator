@@ -3,6 +3,7 @@ import { TeamProps } from "@/lib/types";
 import Image from "next/image";
 
 export const Team: React.FC<TeamProps> = ({
+  sog,
   record,
   bottomColour,
   topColour,
@@ -26,7 +27,7 @@ export const Team: React.FC<TeamProps> = ({
           className="max-w-full aspect-[1.08] drop-shadow-lg"
         />
       </div>
-      <div className="text-center mt-2">{record}</div>
+      <div className="text-center mt-2">SOG: {sog}</div>
     </div>
   );
 };

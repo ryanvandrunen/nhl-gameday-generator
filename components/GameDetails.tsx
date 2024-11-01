@@ -3,6 +3,7 @@ import { GameDetailsProps } from "@/lib/types";
 import Image from "next/image";
 
 export const GameDetails: React.FC<GameDetailsProps> = ({
+  header,
   venue,
   time,
   season,
@@ -10,7 +11,7 @@ export const GameDetails: React.FC<GameDetailsProps> = ({
   return (
     <div className="flex flex-col grow text-sm font-bold tracking-widest text-white max-md:mt-2.5">
       <h1 className="text-xl text-center tracking-[10px] max-md:mx-2.5">
-        GAMEDAY
+        {header}
       </h1>
       <h2 className="mt-7 text-center font-medium">{venue}</h2>
       <Image

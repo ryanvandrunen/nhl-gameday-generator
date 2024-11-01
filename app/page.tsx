@@ -13,23 +13,23 @@ export default function Home() {
   const formattedDate = format(today, "yyyy-MM-dd");
 
   return (
-    <main className="min-h-screen p-4 md:p-8">
+    <main className="min-h-screen">
       <div className="mx-auto max-w-6xl">
         <header className="mb-8 text-center">
-          <h1 className="text-4xl font-bold tracking-tight md:text-6xl bg-gradient-to-r from-black to-[#909090] bg-clip-text text-transparent pb-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-black to-[#909090] bg-clip-text text-transparent pb-2">
             NHL Gameday Graphics
           </h1>
-          <p className="mt-4 text-lg">
+          <p className="mt-4 text-base sm:text-lg">
             Generate graphics for today's NHL games
           </p>
         </header>
 
         <Card className="bg-white/10 backdrop-blur-lg shadow-2xl bg-dots">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">
+            <CardTitle className="text-xl sm:text-2xl font-bold">
               Today's Games ({formattedDate})
             </CardTitle>
-            <CardDescription className="">
+            <CardDescription className="text-sm sm:text-base">
               Select a game to generate a gameday graphic.
             </CardDescription>
           </CardHeader>

@@ -15,8 +15,13 @@ export default async function handler(
     const response = await fetch(url);
     const contentType = response.headers.get("content-type");
 
+    // Set caching headers
+    res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     res.setHeader("Content-Type", contentType || "image/jpeg");
-    res.setHeader("Cache-Control", "public, max-age=3600");
+    
+    // Ensure CORS headers
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
 
     response.body.pipe(res);
   } catch (error) {
