@@ -25,7 +25,7 @@ export default async function handler(
 
   try {
     const response = await fetch(`https://api-web.nhle.com/v1/score/${formattedDate}`);
-    var data = await response.json();
+    const data = await response.json();
     res.status(200).json(data);
   } catch (error) {
     console.error("Failed to fetch NHL scores", error);
