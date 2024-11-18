@@ -211,13 +211,6 @@ const GamePreview = ({
 
   return (
     <div className="flex flex-col items-center">
-      <Button
-        onClick={handleDownload}
-        variant="outline"
-        className="mb-4 bg-black text-white hover:text-white hover:bg-stone-700"
-      >
-        Download as PNG
-      </Button>
       <div
         className="w-full max-w-[751px] overflow-hidden drop-shadow-md"
         ref={previewRef}
@@ -240,6 +233,13 @@ const GamePreview = ({
           )}
         />
       </div>
+      <Button
+        onClick={handleDownload}
+        variant="outline"
+        className="mt-4 bg-black text-white hover:text-white hover:bg-stone-700"
+      >
+        Download as PNG
+      </Button>
     </div>
   );
 };
