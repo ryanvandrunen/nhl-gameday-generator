@@ -22,10 +22,15 @@ export default async function handler(
 
   const today = new Date();
   const formattedDate = format(today, "yyyy-MM-dd");
+  const tomorrow = format(today.getDate() + 1, "yyyy-MM-dd");
 
   try {
     const response = await fetch(`https://api-web.nhle.com/v1/score/${formattedDate}`);
-    const data = await response.json();
+    var data = await response.json();
+    if(data.games[0].awayTeam.score) {
+      const resp = await fetch(`https://api-web.nhle.com/v1/score/${tomorrow}`);
+      data = await resp.json();
+    }
     res.status(200).json(data);
   } catch (error) {
     console.error("Failed to fetch NHL scores", error);

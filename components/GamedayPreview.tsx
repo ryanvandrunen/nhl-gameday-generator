@@ -10,16 +10,12 @@ interface GamedayPreviewProps {
   game: NHLGame;
   awayPlayerImage: string;
   homePlayerImage: string;
-  leftLogoUrl: string;
-  rightLogoUrl: string;
 }
 
 export const GamedayPreview: React.FC<GamedayPreviewProps> = ({
   game,
   awayPlayerImage,
   homePlayerImage,
-  leftLogoUrl,
-  rightLogoUrl,
 }) => {
   return (
     <div className="overflow-hidden flex justify-center w-full max-w-[751px] clip-content">
@@ -34,103 +30,51 @@ export const GamedayPreview: React.FC<GamedayPreviewProps> = ({
           altRight={`${game.homeTeam.name.default} player`}
         />
         <section className="py-2 w-full bg-zinc-900">
-          {game.awayTeam.record ? (
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-5">
-              <div className="w-full sm:w-[33%]">
-                <Team
-                  logoSrc={leftLogoUrl}
-                  record={`${game.awayTeam.record}`}
-                  bottomColour={
-                    TEAM_COLOURS[
-                      game.awayTeam.abbrev as keyof typeof TEAM_COLOURS
-                    ][0]
-                  }
-                  topColour={
-                    TEAM_COLOURS[
-                      game.awayTeam.abbrev as keyof typeof TEAM_COLOURS
-                    ][1]
-                  }
-                />
-              </div>
-              <div className="w-full sm:w-[33%]">
-                <GameDetails
-                  header="GAMEDAY"
-                  venue={game.venue.default}
-                  time={`${format(parseISO(game.startTimeUTC), "h:mm a")} ET`}
-                  season={`${game.season
-                    .toString()
-                    .substring(0, 4)} - ${game.season
-                    .toString()
-                    .substring(4)} SEASON`}
-                />
-              </div>
-              <div className="w-full sm:w-[33%]">
-                <Team
-                  logoSrc={rightLogoUrl}
-                  record={`${game.homeTeam.record}`}
-                  bottomColour={
-                    TEAM_COLOURS[
-                      game.homeTeam.abbrev as keyof typeof TEAM_COLOURS
-                    ][0]
-                  }
-                  topColour={
-                    TEAM_COLOURS[
-                      game.homeTeam.abbrev as keyof typeof TEAM_COLOURS
-                    ][1]
-                  }
-                />
-              </div>
+          <div className="flex flex-col sm:flex-row">
+            <div className="w-full sm:w-1/3">
+              <Team
+                logoSrc={game.awayTeam.logo}
+                record={`${game.awayTeam.record}`}
+                bottomColour={
+                  TEAM_COLOURS[
+                    game.awayTeam.abbrev as keyof typeof TEAM_COLOURS
+                  ][0]
+                }
+                topColour={
+                  TEAM_COLOURS[
+                    game.awayTeam.abbrev as keyof typeof TEAM_COLOURS
+                  ][1]
+                }
+              />
             </div>
-          ) : (
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-5">
-              <div className="w-full sm:w-[33%]">
-                <Team
-                  logoSrc={leftLogoUrl}
-                  record={`${game.awayTeam.score}`}
-                  sog={`${game.awayTeam.sog}`}
-                  bottomColour={
-                    TEAM_COLOURS[
-                      game.awayTeam.abbrev as keyof typeof TEAM_COLOURS
-                    ][0]
-                  }
-                  topColour={
-                    TEAM_COLOURS[
-                      game.awayTeam.abbrev as keyof typeof TEAM_COLOURS
-                    ][1]
-                  }
-                />
-              </div>
-              <div className="w-full sm:w-[33%]">
-                <GameDetails
-                  header="SCORE"
-                  venue={game.venue.default}
-                  time={`${format(parseISO(game.startTimeUTC), "h:mm a")} ET`}
-                  season={`${game.season
-                    .toString()
-                    .substring(0, 4)} - ${game.season
-                    .toString()
-                    .substring(4)} SEASON`}
-                />
-              </div>
-              <div className="w-full sm:w-[33%]">
-                <Team
-                  logoSrc={rightLogoUrl}
-                  record={`${game.homeTeam.score}`}
-                  sog={`${game.homeTeam.sog}`}
-                  bottomColour={
-                    TEAM_COLOURS[
-                      game.homeTeam.abbrev as keyof typeof TEAM_COLOURS
-                    ][0]
-                  }
-                  topColour={
-                    TEAM_COLOURS[
-                      game.homeTeam.abbrev as keyof typeof TEAM_COLOURS
-                    ][1]
-                  }
-                />
-              </div>
+            <div className="w-full sm:w-1/3 h-full flex items-center justify-center">
+              <GameDetails
+                venue={game.venue.default}
+                time={`${format(parseISO(game.startTimeUTC), "h:mm a")} ET`}
+                season={`${game.season
+                  .toString()
+                  .substring(0, 4)} - ${game.season
+                  .toString()
+                  .substring(4)} SEASON`}
+              />
             </div>
-          )}
+            <div className="w-full sm:w-1/3">
+              <Team
+                logoSrc={game.homeTeam.logo}
+                record={`${game.homeTeam.record}`}
+                bottomColour={
+                  TEAM_COLOURS[
+                    game.homeTeam.abbrev as keyof typeof TEAM_COLOURS
+                  ][0]
+                }
+                topColour={
+                  TEAM_COLOURS[
+                    game.homeTeam.abbrev as keyof typeof TEAM_COLOURS
+                  ][1]
+                }
+              />
+            </div>
+          </div>
         </section>
       </section>
     </div>

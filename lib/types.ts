@@ -13,6 +13,7 @@ export interface NHLGame {
       record: string;
       score: string;
       sog: string;
+      logo: string;
     };
     homeTeam: {
       id: number;
@@ -23,6 +24,7 @@ export interface NHLGame {
       record: string;
       score: string;
       sog: string;
+      logo: string;
     };
     venue: {
       default: string;

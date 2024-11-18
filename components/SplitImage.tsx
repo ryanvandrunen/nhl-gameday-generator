@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import { CldImage } from "next-cloudinary";
 
 interface SplitImageProps {
   leftImage: string;

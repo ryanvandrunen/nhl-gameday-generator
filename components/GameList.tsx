@@ -32,11 +32,7 @@ const GameList = () => {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        await Promise.all([
-          fetchGames(),
-          preloadLogos(),
-          preloadPlayerImages(),
-        ]);
+        await Promise.all([fetchGames(), preloadPlayerImages()]);
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch data", error);
@@ -52,22 +48,6 @@ const GameList = () => {
     const response = await fetch("/api/nhl-scores");
     const data = await response.json();
     setGames(data.games || []);
-  };
-
-  const preloadLogos = async () => {
-    const logosRef = ref(storage, "logos");
-    const result: Record<string, string> = {};
-    const teamAbbreviations = Object.keys(TEAM_COLOURS);
-
-    await Promise.all(
-      teamAbbreviations.map(async (abbrev) => {
-        const logoRef = ref(logosRef, `${abbrev}.svg`);
-        const url = await getDownloadURL(logoRef);
-        result[abbrev] = url;
-      })
-    );
-
-    setLogoUrls(result);
   };
 
   const preloadPlayerImages = async () => {
@@ -108,11 +88,7 @@ const GameList = () => {
       <GamesTable games={games} onSelectGame={setSelectedGame} />
 
       {selectedGame && (
-        <GamePreview
-          game={selectedGame}
-          playerImages={playerImages}
-          logoUrls={logoUrls}
-        />
+        <GamePreview game={selectedGame} playerImages={playerImages} />
       )}
     </div>
   );
@@ -198,11 +174,9 @@ const GamesTable = ({
 const GamePreview = ({
   game,
   playerImages,
-  logoUrls,
 }: {
   game: NHLGame;
   playerImages: Record<string, string[]>;
-  logoUrls: Record<string, string>;
 }) => {
   const previewRef = useRef<HTMLDivElement>(null);
 
@@ -248,8 +222,6 @@ const GamePreview = ({
               )
             ] || ""
           )}
-          leftLogoUrl={proxyUrl(logoUrls[game.awayTeam.abbrev] || "")}
-          rightLogoUrl={proxyUrl(logoUrls[game.homeTeam.abbrev] || "")}
         />
       </div>
 
