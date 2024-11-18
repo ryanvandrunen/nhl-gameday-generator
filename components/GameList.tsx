@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { format, parseISO } from "date-fns";
-import { Anchor, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { NHLGame } from "@/lib/types";
 import { GamedayPreview } from "@/components/GamedayPreview";
 import { Button } from "@/components/ui/button";
@@ -156,13 +156,23 @@ const GamesTable = ({
               {game.venue.default}
             </TableCell>
             <TableCell className="text-right">
-              <Button
-                variant="outline"
-                onClick={() => onSelectGame(game)}
-                className="bg-black text-white hover:text-white hover:bg-stone-700 text-xs sm:text-sm"
-              >
-                Generate
-              </Button>
+              {game.awayTeam.record ? (
+                <Button
+                  variant="outline"
+                  onClick={() => onSelectGame(game)}
+                  className="bg-black text-white hover:text-white hover:bg-stone-700 text-xs sm:text-sm"
+                >
+                  Generate
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  disabled
+                  className="bg-black text-white hover:text-white hover:bg-stone-700 text-xs sm:text-sm"
+                >
+                  Unavailable
+                </Button>
+              )}
             </TableCell>
           </TableRow>
         ))}
