@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "next/image";
+import { CldImage } from "next-cloudinary";
 
 interface SplitImageProps {
   leftImage: string;
@@ -21,7 +21,7 @@ const SplitImage = ({
       <div className="relative aspect-[4/3]">
         {/* Left Panel */}
         <div className="absolute inset-0 clip-path-right overflow-hidden z-[-2]">
-          <Image
+          <img
             crossOrigin="anonymous"
             src={rightImage}
             alt={altLeft}
@@ -31,7 +31,7 @@ const SplitImage = ({
 
         {/* Right Panel */}
         <div className="absolute inset-0 clip-path-left z-[-2]">
-          <Image
+          <img
             crossOrigin="anonymous"
             src={leftImage}
             alt={altRight}

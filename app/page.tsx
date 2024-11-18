@@ -20,14 +20,14 @@ export default function Home() {
             NHL Gameday Graphics
           </h1>
           <p className="mt-4 text-base sm:text-lg">
-            Generate graphics for today&apos;s NHL games
+            Generate graphics for today's NHL games
           </p>
         </header>
 
         <Card className="bg-white/10 backdrop-blur-lg shadow-2xl bg-dots">
           <CardHeader>
             <CardTitle className="text-xl sm:text-2xl font-bold">
-              Today&apos;s Games ({formattedDate})
+              Today's Games ({formattedDate})
             </CardTitle>
             <CardDescription className="text-sm sm:text-base">
               Select a game to generate a gameday graphic.
