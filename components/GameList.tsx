@@ -215,6 +215,13 @@ const GamePreview = ({
         className="w-full max-w-[751px] overflow-hidden drop-shadow-md"
         ref={previewRef}
       >
+        <Button
+          onClick={handleDownload}
+          variant="outline"
+          className="mt-4 bg-black text-white hover:text-white hover:bg-stone-700"
+        >
+          Download as PNG
+        </Button>
         <GamedayPreview
           game={game}
           awayPlayerImage={proxyUrl(
@@ -233,14 +240,6 @@ const GamePreview = ({
           )}
         />
       </div>
-
-      <Button
-        onClick={handleDownload}
-        variant="outline"
-        className="mt-4 bg-black text-white hover:text-white hover:bg-stone-700"
-      >
-        Download as PNG
-      </Button>
     </div>
   );
 };
