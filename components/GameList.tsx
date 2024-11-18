@@ -21,7 +21,6 @@ import { toPng } from "html-to-image";
 
 const GameList = () => {
   const [games, setGames] = useState<NHLGame[]>([]);
-  const [logoUrls, setLogoUrls] = useState<Record<string, string>>({});
   const [playerImages, setPlayerImages] = useState<Record<string, string[]>>(
     {}
   );
