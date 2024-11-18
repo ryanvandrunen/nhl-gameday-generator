@@ -214,7 +214,7 @@ const GamePreview = ({
       <Button
         onClick={handleDownload}
         variant="outline"
-        className="my-4 bg-black text-white hover:text-white hover:bg-stone-700"
+        className="mb-4 bg-black text-white hover:text-white hover:bg-stone-700"
       >
         Download as PNG
       </Button>
