@@ -21,7 +21,7 @@ export default async function handler(
   }
 
   const today = new Date();
-  const formattedDate = toZonedTime(today, "America/New_York");
+  const formattedDate = toZonedTime(today, "America/New_York").toISOString().split('T')[0];
 
   try {
     const response = await fetch(`https://api-web.nhle.com/v1/score/${formattedDate}`);
