@@ -21,7 +21,8 @@ export default async function handler(
   }
 
   const today = new Date();
-  const formattedDate = format(today, "yyyy-MM-dd");
+  const utcToday = new Date(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
+  const formattedDate = format(utcToday, "yyyy-MM-dd");
 
   try {
     const response = await fetch(`https://api-web.nhle.com/v1/score/${formattedDate}`);
