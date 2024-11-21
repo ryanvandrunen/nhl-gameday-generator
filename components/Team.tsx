@@ -23,7 +23,7 @@ export const Team: React.FC<TeamProps> = ({
           height={230}
           src={logoSrc}
           alt="team logo"
-          className="max-w-full mx-auto aspect-[1.08] drop-shadow-lg"
+          className="max-w-full mx-auto aspect-[1.08] drop-shadow-[0_20px_20px_rgba(0,0,0,0.4)]"
         />
       </div>
       <div className="text-center mt-2">{record}</div>

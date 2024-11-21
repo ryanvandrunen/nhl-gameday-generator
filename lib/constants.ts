@@ -32,3 +32,8 @@ export const TEAM_COLOURS = {
   "WPG": ["#051631", "#072652"],
   "WSH": ["#BC0C23", "#D4143C"],
 };
+
+export const COLOUR_SWAP = {
+  "TBL": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
+  "TOR": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg"
+}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Team } from "./Team";
 import { GameDetails } from "./GameDetails";
-import { TEAM_COLOURS } from "@/lib/constants";
+import { TEAM_COLOURS, COLOUR_SWAP } from "@/lib/constants";
 import { NHLGame } from "@/lib/types";
 import { format, parseISO } from "date-fns";
 import SplitImage from "./SplitImage";
@@ -17,6 +17,13 @@ export const GamedayPreview: React.FC<GamedayPreviewProps> = ({
   awayPlayerImage,
   homePlayerImage,
 }) => {
+  const pickLogo = (abbrev: string) => {
+    if (COLOUR_SWAP[abbrev as keyof typeof COLOUR_SWAP]) {
+      return COLOUR_SWAP[abbrev as keyof typeof COLOUR_SWAP];
+    }
+    return null;
+  };
+
   return (
     <div className="overflow-hidden flex justify-center w-full max-w-[751px] clip-content">
       <section
@@ -33,7 +40,7 @@ export const GamedayPreview: React.FC<GamedayPreviewProps> = ({
           <div className="flex flex-col sm:flex-row">
             <div className="w-full sm:w-1/3">
               <Team
-                logoSrc={game.awayTeam.logo}
+                logoSrc={pickLogo(game.awayTeam.abbrev) || game.awayTeam.logo}
                 record={`${game.awayTeam.record}`}
                 bottomColour={
                   TEAM_COLOURS[
@@ -60,7 +67,7 @@ export const GamedayPreview: React.FC<GamedayPreviewProps> = ({
             </div>
             <div className="w-full sm:w-1/3">
               <Team
-                logoSrc={game.homeTeam.logo}
+                logoSrc={pickLogo(game.homeTeam.abbrev) || game.homeTeam.logo}
                 record={`${game.homeTeam.record}`}
                 bottomColour={
                   TEAM_COLOURS[
