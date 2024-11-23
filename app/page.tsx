@@ -7,12 +7,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toZonedTime } from "date-fns-tz";
+import { format } from "date-fns";
 
 export default function Home() {
   const today = new Date();
-  const formattedDate = toZonedTime(today, "America/New_York")
-    .toISOString()
-    .split("T")[0];
+  const formattedDate = format(today, "yyyy-MM-dd");
+  // const formattedDate = toZonedTime(today, "America/New_York")
+  //   .toISOString()
+  //   .split("T")[0];
 
   return (
     <main className="min-h-screen">
