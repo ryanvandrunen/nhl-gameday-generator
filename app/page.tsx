@@ -6,11 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { format } from "date-fns";
+import { getLocalDate } from "@/lib/utils";
 
 export default function Home() {
-  const today = new Date();
-  const formattedDate = format(today, "yyyy-MM-dd");
+  const dateStr = getLocalDate().formattedDate;
+  const date = new Date(dateStr);
+  const formattedDate = date.toISOString().split("T")[0];
 
   return (
     <main className="min-h-screen">

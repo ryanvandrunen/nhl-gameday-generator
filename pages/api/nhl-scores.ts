@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { toZonedTime } from "date-fns-tz";
+import { getLocalDate } from "@/lib/utils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,8 +20,9 @@ export default async function handler(
     return;
   }
 
-  const today = new Date();
-  const formattedDate = toZonedTime(today, "America/New_York").toISOString().split('T')[0];
+  const dateStr = getLocalDate().formattedDate;
+  const date = new Date(dateStr);
+  const formattedDate = date.toISOString().split('T')[0];
 
   try {
     const response = await fetch(`https://api-web.nhle.com/v1/score/${formattedDate}`);
