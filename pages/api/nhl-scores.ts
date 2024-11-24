@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getLocalDate } from "@/lib/utils";
+import { getLocalDate, formatDate } from "@/lib/utils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,8 +21,7 @@ export default async function handler(
   }
 
   const dateStr = getLocalDate().formattedDate;
-  const date = new Date(dateStr);
-  const formattedDate = date.toISOString().split('T')[0];
+  const formattedDate = formatDate(dateStr);
 
   try {
     const response = await fetch(`https://api-web.nhle.com/v1/score/${formattedDate}`);
