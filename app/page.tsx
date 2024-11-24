@@ -7,13 +7,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { format } from "date-fns";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function Home() {
   const today = new Date();
   const formattedDate = format(today, "yyyy-MM-dd");
-  // const formattedDate = toZonedTime(today, "America/New_York")
-  //   .toISOString()
-  //   .split("T")[0];
 
   return (
     <main className="min-h-screen">
