@@ -9,8 +9,7 @@ import {
 import { getLocalDate, formatDate } from "@/lib/utils";
 
 export default function Home() {
-  const dateStr = getLocalDate().formattedDate;
-  const formattedDate = formatDate(dateStr);
+  const formattedDate = getLocalDate().formattedDate;
 
   return (
     <main className="min-h-screen">
