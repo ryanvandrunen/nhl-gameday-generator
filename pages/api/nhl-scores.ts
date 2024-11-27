@@ -20,9 +20,7 @@ export default async function handler(
     return;
   }
 
-  const dateStr = getLocalDate().formattedDate;
-  const date = new Date(dateStr);
-  const formattedDate = date.toISOString().split('T')[0];
+  const formattedDate = getLocalDate().formattedDate;
 
   try {
     const response = await fetch(`https://api-web.nhle.com/v1/score/${formattedDate}`);

@@ -9,9 +9,7 @@ import {
 import { getLocalDate } from "@/lib/utils";
 
 export default function Home() {
-  const dateStr = getLocalDate().formattedDate;
-  const date = new Date(dateStr);
-  const formattedDate = date.toISOString().split("T")[0];
+  const formattedDate = getLocalDate().formattedDate;
 
   return (
     <main className="min-h-screen">
