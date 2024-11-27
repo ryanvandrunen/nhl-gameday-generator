@@ -6,15 +6,20 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getLocalDate() {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return {
-    formattedDate: `${year}-${month}-${day}`,
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    isoString: date.toISOString(),
-    timestamp: date.getTime()
-  };
+   // Use UTC to ensure consistency across environments
+   const date = new Date();
+  
+   // For NHL scores, we want the local time relative to the Eastern Time Zone
+   const easternTime = new Date(date.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+   
+   const year = easternTime.getFullYear();
+   const month = String(easternTime.getMonth() + 1).padStart(2, '0');
+   const day = String(easternTime.getDate()).padStart(2, '0');
+ 
+   return {
+     formattedDate: `${year}-${month}-${day}`,
+     timezone: 'America/New_York',
+     isoString: easternTime.toISOString(),
+     timestamp: easternTime.getTime()
+   };
 }
