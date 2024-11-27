@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getLocalDate, formatDate } from "@/lib/utils";
+import { getLocalDate } from "@/lib/utils";
 
 export default function Home() {
   const formattedDate = getLocalDate().formattedDate;

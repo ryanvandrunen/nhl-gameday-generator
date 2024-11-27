@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getLocalDate, formatDate } from "@/lib/utils";
+import { getLocalDate } from "@/lib/utils";
 
 export default async function handler(
   req: NextApiRequest,
