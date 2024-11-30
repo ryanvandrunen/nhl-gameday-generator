@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import GameList from "../components/GameList";
 import {
   Card,
@@ -9,7 +12,23 @@ import {
 import { getLocalDate } from "@/lib/utils";
 
 export default function Home() {
-  const formattedDate = getLocalDate().formattedDate;
+  const [formattedDate, setFormattedDate] = useState("");
+
+  useEffect(() => {
+    const getLocalDate = () => {
+      const easternTime = new Date().toLocaleString("en-US", {
+        timeZone: "America/New_York",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+
+      const [month, day, year] = easternTime.split("/");
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    };
+
+    setFormattedDate(getLocalDate());
+  }, []);
 
   return (
     <main className="min-h-screen">
