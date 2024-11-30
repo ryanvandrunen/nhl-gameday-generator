@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getLocalDate } from "@/lib/utils";
 
 export default function Home() {
   const [formattedDate, setFormattedDate] = useState("");
